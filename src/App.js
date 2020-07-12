@@ -18,11 +18,11 @@ function App() {
     results: [],
     selected: {},
   });
-  const apiurl = "http://www.omdbapi.com/?apikey=510554b1&type=series";
+  const apiurl = "https://www.omdbapi.com/?apikey=510554b1";
 
   const searchTitle = (e) => {
     if (e.key === "Enter") {
-      let url = apiurl + "&s=" + state.keyword;
+      let url = apiurl + "&type=series&s=" + state.keyword;
       if (state.year) {
         url += "&y=" + state.year;
       }
