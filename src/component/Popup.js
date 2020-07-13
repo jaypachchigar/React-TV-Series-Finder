@@ -56,8 +56,6 @@ function Popup({ selected, closePopup }) {
       <Modal
         open={open}
         onClose={closePopup}
-        aria-labelledby="simple-modal-title"
-        aria-describedby="simple-modal-description"
         style={{
           display: "flex",
           alignItems: "center",

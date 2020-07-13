@@ -4,6 +4,7 @@ import Box from "@material-ui/core/Box";
 
 function Search({ handleTitleInput, handleYearInput, search }) {
   let fullWidth = true;
+
   return (
     <Box display="inline">
       <Input

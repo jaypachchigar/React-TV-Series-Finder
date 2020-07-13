@@ -8,12 +8,12 @@ import Typography from "@material-ui/core/Typography";
 
 const useStyles = makeStyles({
   root: {
-    width: 400,
-    height: 400,
+    width: 350,
+    height: 350,
     padding: 30,
   },
   media: {
-    height: 250,
+    height: 200,
   },
 });
 
@@ -27,6 +27,7 @@ function Result({ result, openPopup }) {
           image={result.Poster}
           title={result.Title}
         />
+
         <CardContent>
           <Typography gutterBottom variant="h5" component="h2">
             {result.Title}

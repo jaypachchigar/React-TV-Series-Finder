@@ -1,12 +1,10 @@
 import React, { useState } from "react";
-
 import axios from "axios";
 import Typography from "@material-ui/core/Typography";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import { Box } from "@material-ui/core";
-
 import Search from "./component/Search";
 import Results from "./component/Results";
 import Popup from "./component/Popup";
@@ -16,10 +14,29 @@ function App() {
     keyword: "",
     year: null,
     results: [],
+    currentResults: [],
     selected: {},
+    page: 1,
+    resultsPerPage: 8,
+    maxPage: 1,
   });
   const apiurl = "https://www.omdbapi.com/?apikey=510554b1";
 
+  const handleChangePage = (event, newPage) => {
+    const indexOfLastResult = newPage * state.resultsPerPage;
+    const indexOfFirstResult = indexOfLastResult - state.resultsPerPage;
+    let currentResultsdata = state.results.slice(
+      indexOfFirstResult,
+      indexOfLastResult
+    );
+    setState((prevState) => {
+      return {
+        ...prevState,
+        currentResults: currentResultsdata,
+        page: newPage,
+      };
+    });
+  };
   const searchTitle = (e) => {
     if (e.key === "Enter") {
       let url = apiurl + "&type=series&s=" + state.keyword;
@@ -30,8 +47,25 @@ function App() {
       axios(url).then(({ data }) => {
         let results = data.Search;
         console.debug(results);
+        const indexOfLastResult = state.page * state.resultsPerPage;
+        const indexOfFirstResult = indexOfLastResult - state.resultsPerPage;
+        let currentResultsdata = undefined;
+        var maxPage = 1;
+        if (results) {
+          currentResultsdata = results.slice(
+            indexOfFirstResult,
+            indexOfLastResult
+          );
+          maxPage = Math.ceil(results.length / state.resultsPerPage);
+          console.debug(currentResultsdata);
+        }
         setState((prevState) => {
-          return { ...prevState, results: results };
+          return {
+            ...prevState,
+            results: results,
+            currentResults: currentResultsdata,
+            maxPage: maxPage,
+          };
         });
       });
     }
@@ -90,7 +124,13 @@ function App() {
         />
       </Box>
       <Box display="flex" alignItems="center" justifyContent="center">
-        <Results results={state.results} openPopup={openPopup} />
+        <Results
+          results={state.currentResults}
+          openPopup={openPopup}
+          handleChangePage={handleChangePage}
+          page={state.page}
+          maxPage={state.maxPage}
+        />
         {typeof state.selected.Title != "undefined" ? (
           <Popup selected={state.selected} closePopup={closePopup} />
         ) : (
